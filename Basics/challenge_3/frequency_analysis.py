@@ -43,9 +43,7 @@ def find_key_from_frequent_characters(character):
     We create a list of potential Keys for each character in frequent_character
     """
     frequent_characters = "etaoin shrdlu"
-    keys = list()
-    for i in frequent_characters:
-        keys.append(ord(character) ^ ord(i))
+    keys = [ord(character) ^ ord(frequent_char) for frequent_char in frequent_characters]
     return keys
 
 
