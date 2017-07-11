@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2
 # coding: utf8
 
 """
@@ -57,7 +57,7 @@ def score(word_list, language_dictionary):
 
 if __name__ == '__main__':
     SOURCE_FILE = open(sys.argv[1], "r")
-    CIPHER_TEXT = decode_hex_string(SOURCE_FILE.read().translate(None, ' \n'))
+    CIPHER_TEXT = decode_hex_string(SOURCE_FILE.read().translate(None, ' \n\r\t'))
     MOST_FREQUENT_CHARACTER = find_most_frequent_character(CIPHER_TEXT)
     KEY_LIST = find_key_from_frequent_characters(MOST_FREQUENT_CHARACTER)
     BEST_SCORE = 0
