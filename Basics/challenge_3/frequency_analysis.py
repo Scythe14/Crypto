@@ -10,6 +10,7 @@ url: https://cryptopals.com/sets/1/challenges/3
 import sys
 import codecs
 import collections
+import string
 
 
 def decode_hex_string(hex_string):
@@ -58,7 +59,7 @@ def score(word_list, language_dictionary):
 
 if __name__ == '__main__':
     SOURCE_FILE = open(sys.argv[1], "r")
-    CIPHER_TEXT = decode_hex_string(SOURCE_FILE.read()[:-1])
+    CIPHER_TEXT = decode_hex_string(SOURCE_FILE.read().translate(None, ' \n'))
     MOST_FREQUENT_CHARACTER = find_most_frequent_character(CIPHER_TEXT)
     KEY_LIST = find_key_from_frequent_characters(MOST_FREQUENT_CHARACTER)
     BEST_SCORE = 0
