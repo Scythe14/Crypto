@@ -36,7 +36,7 @@ def decipher_text(ciphertext, xor_key):
     return text.lower()
 
 
-def find_key_from_token(character):
+def find_key_from_frequent_characters(character):
     """
     Key = cipher_character xor character_in_clear
     We create a list of potential Keys for each character in frequent_character
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     SOURCE_FILE = open(sys.argv[1], "r")
     CIPHER_TEXT = decode_hex_string(SOURCE_FILE.read()[:-1])
     MOST_FREQUENT_CHARACTER = find_most_frequent_character(CIPHER_TEXT)
-    KEY_LIST = find_key_from_token(MOST_FREQUENT_CHARACTER)
+    KEY_LIST = find_key_from_frequent_characters(MOST_FREQUENT_CHARACTER)
     BEST_SCORE = 0
     KEY = ""
     CLEAR_TEXT = ""
