@@ -8,46 +8,32 @@ url: https://cryptopals.com/sets/1/challenges/3
 """
 
 import sys
+import codecs
+import collections
 
 
-def tokenize(cipher_text):
+def decode_hex_string(hex_string):
     """
-    Pack per byte
-    for example: 1,b,... -> 1b,...
+    Decodes hex string
     """
-    token_list = list()
-    tmp_token = ""
-    counter = 0
-    for i in cipher_text:
-        tmp_token += i
-        if (counter % 2) != 0:
-            token_list.append(int(tmp_token, 16))
-            tmp_token = ""
-        counter += 1
-    return token_list
+    return codecs.encode(codecs.decode(hex_string, 'hex'))
 
 
-def find_most_frequent_token(cipher_token):
+def find_most_frequent_character(ciphertext):
     """
-    Find and return the token with the maximum occurrences
+    Find and return the character with the maximum occurrences
     """
-    map_character = dict()
-    for i in cipher_token:
-        if i not in map_character.keys():
-            map_character[i] = 1
-        else:
-            map_character[i] += 1
-    return max(map_character.iterkeys(), key=(lambda key: map_character[key]))
+    return collections.Counter(ciphertext).most_common(1)[0][0]
 
 
-def decipher_text(cipher_text, key):
+def decipher_text(ciphertext, xor_key):
     """
-    Recover the plaintext from the cipher_text
+    Recover the plaintext from the ciphertext
     """
-    plaintext = ""
-    for i in cipher_text:
-        plaintext += chr(i ^ key)
-    return plaintext.lower()
+    text = ""
+    for i in ciphertext:
+        text += chr(ord(i) ^ xor_key)
+    return text.lower()
 
 
 def find_key_from_token(character):
@@ -55,10 +41,10 @@ def find_key_from_token(character):
     Key = cipher_character xor character_in_clear
     We create a list of potential Keys for each character in frequent_character
     """
-    frequent_character = "ETAOIN SHRDLU"
+    frequent_characters = "etaoin shrdlu"
     keys = list()
-    for i in frequent_character:
-        keys.append(character ^ ord(i))
+    for i in frequent_characters:
+        keys.append(ord(character) ^ ord(i))
     return keys
 
 
@@ -66,29 +52,26 @@ def score(word_list, language_dictionary):
     """
     Iterates on each word and try to find a match in a language dictionary.
     """
-    number_of_match = 0
-    for word in word_list:
-        if word in language_dictionary:
-            number_of_match += 1
+    number_of_match = sum(word in language_dictionary for word in word_list)
     return float(float(number_of_match) / float(len(word_list)))
 
 
 if __name__ == '__main__':
-    source_file = open(sys.argv[1], "r")
-    tok_list = tokenize(source_file.read())
-    most_frequent_token = find_most_frequent_token(tok_list)
-    key_list = find_key_from_token(most_frequent_token)
-    best_score = 0
-    key = ""
-    clear_text = ""
-    english_dictionary = open("words.txt").read()
-    for key_element in key_list:
-        plaintext = decipher_text(tok_list, key_element)
+    SOURCE_FILE = open(sys.argv[1], "r")
+    CIPHER_TEXT = decode_hex_string(SOURCE_FILE.read()[:-1])
+    MOST_FREQUENT_CHARACTER = find_most_frequent_character(CIPHER_TEXT)
+    KEY_LIST = find_key_from_token(MOST_FREQUENT_CHARACTER)
+    BEST_SCORE = 0
+    KEY = ""
+    CLEAR_TEXT = ""
+    ENGLISH_DICTIONARY = open("words.txt").read()
+    for key_element in KEY_LIST:
+        plaintext = decipher_text(CIPHER_TEXT, key_element)
         words = plaintext.split()
-        current_key_score = score(words, english_dictionary)
-        if best_score < current_key_score:
-            best_score = current_key_score
-            key = str(key_element)
-            clear_text = plaintext
-    print "Key: " + key + "\nplaintext: " + "\"" + clear_text + "\""
-    print 'Score: %.2f/1' % best_score
+        current_key_score = score(words, ENGLISH_DICTIONARY)
+        if BEST_SCORE < current_key_score:
+            BEST_SCORE = current_key_score
+            KEY = str(key_element)
+            CLEAR_TEXT = plaintext
+    print("Key: " + KEY + "\nplaintext: " + "\"" + CLEAR_TEXT + "\"")
+    print('Score: %.2f/1' % BEST_SCORE)
