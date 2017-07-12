@@ -1,8 +1,7 @@
 # Crypto Experiments
 
 Solutions to the Matasano crypto challenges.
+
 More information: https://cryptopals.com/
 
-Contributors:
-Scythe14
-lemme
+Contributors: Scythe14 and lemme
