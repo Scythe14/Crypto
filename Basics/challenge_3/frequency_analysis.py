@@ -17,7 +17,7 @@ def decode_hex_string(hex_string):
     """
     Decodes hex string
     """
-    return codecs.encode(codecs.decode(hex_string, 'hex'))
+    return codecs.decode(hex_string, 'hex')
 
 
 def find_most_frequent_character(ciphertext):
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     CLEAR_TEXT = ""
     ENGLISH_DICTIONARY = open("words.txt").read()
     for key_element in KEY_LIST:
-        plaintext = decipher_text(CIPHER_TEXT, key_element)
+        plaintext = decipher_text(CIPHER_TEXT, key_element).strip()
         words = plaintext.split()
         current_key_score = score(words, ENGLISH_DICTIONARY)
         if BEST_SCORE < current_key_score:
