@@ -4,8 +4,6 @@
 # Cryptopals Challenges - Dany Bouca Nova
 # https://cryptopals.com/sets/1/challenges/3
 
-# https://en.wikipedia.org/wiki/Letter_frequency
-
 import codecs
 
 
